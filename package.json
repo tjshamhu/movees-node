@@ -2,12 +2,12 @@
   "name": "movees-node",
   "version": "1.0.0",
   "description": "movees backend powered by nodejs",
-  "main": "server.ts",
+  "main": "src/server.ts",
   "author": "Takudzwa Shamhu",
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "start": "nodemon server.ts"
+    "start": "nodemon src/server.ts"
   },
   "dependencies": {
     "express": "4.17.1",
