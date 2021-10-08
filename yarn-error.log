@@ -1,0 +1,44 @@
+Arguments: 
+  /Users/jayden/.nvm/versions/node/v14.16.1/bin/node /Users/jayden/.nvm/versions/node/v14.16.1/bin/yarn add express express-graphl graphql
+
+PATH: 
+  /Users/jayden/.nvm/versions/node/v14.16.1/bin:/usr/local/opt/terraform@0.12/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  14.16.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/express-graphl: Not found
+      at Request.params.callback [as _callback] (/Users/jayden/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:66988:18)
+      at Request.self.callback (/Users/jayden/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:140662:22)
+      at Request.emit (events.js:315:20)
+      at Request.<anonymous> (/Users/jayden/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:141634:10)
+      at Request.emit (events.js:315:20)
+      at IncomingMessage.<anonymous> (/Users/jayden/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:141556:12)
+      at Object.onceWrapper (events.js:421:28)
+      at IncomingMessage.emit (events.js:327:22)
+      at endReadableNT (internal/streams/readable.js:1327:12)
+      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+
+npm manifest: 
+  {
+    "name": "movees-node",
+    "version": "1.0.0",
+    "description": "movees backend powered by nodejs",
+    "main": "server.ts",
+    "author": "Takudzwa Shamhu",
+    "license": "UNLICENSED",
+    "private": true
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
