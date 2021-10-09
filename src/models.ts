@@ -40,7 +40,7 @@ export const Cast = sequelize.define('cast', {
         allowNull: false,
         references: {model: Person, key: 'person_id'}
     },
-    character_name: {type: DataTypes.STRING},
+    character_name: {type: DataTypes.STRING, primaryKey: true},
     cast_order: {type: DataTypes.INTEGER},
 }, {
     tableName: 'movie_cast',

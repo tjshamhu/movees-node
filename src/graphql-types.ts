@@ -1,5 +1,9 @@
 import {GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString} from 'graphql'
 import {Cast, Genre, Movie, Person} from './models'
+import {Op} from 'sequelize'
+
+const DEFAULT_PAGE = 1
+const DEFAULT_PAGE_SIZE = 25
 
 export const Query  = new GraphQLObjectType({
     name: 'Query',
@@ -10,12 +14,16 @@ export const Query  = new GraphQLObjectType({
             description: 'List of movies available in our date store',
             args: {
                 page: {type: GraphQLInt},
-                pageSize: {type: GraphQLInt}
+                pageSize: {type: GraphQLInt},
+                searchTerm: {type: GraphQLString}
             },
-            resolve: async (_, {page = 1, pageSize = 25}) => Movie.findAll({
+            resolve: async (_, {page = DEFAULT_PAGE, pageSize = DEFAULT_PAGE_SIZE, searchTerm = ''}) => Movie.findAll({
                 include: ['cast', 'genres'],
                 limit: Math.abs(pageSize),
-                offset: Math.abs(pageSize * (page - 1))
+                offset: Math.abs(pageSize * (page - 1)),
+                where: {
+                    [Op.or]: ['title'].map(field => ({[field]: {[Op.iLike]: `%${searchTerm}%`}}))
+                }
             })
         },
         people: {
@@ -23,12 +31,16 @@ export const Query  = new GraphQLObjectType({
             description: 'List of people in show business',
             args: {
                 page: {type: GraphQLInt},
-                pageSize: {type: GraphQLInt}
+                pageSize: {type: GraphQLInt},
+                searchTerm: {type: GraphQLString}
             },
-            resolve: async (_, {page = 1, pageSize = 25}) =>  Person.findAll({
+            resolve: async (_, {page = DEFAULT_PAGE, pageSize = DEFAULT_PAGE_SIZE, searchTerm = ''}) =>  Person.findAll({
                 include: ['castings'],
                 limit: Math.abs(pageSize),
-                offset: Math.abs(pageSize * (page - 1))
+                offset: Math.abs(pageSize * (page - 1)),
+                where: {
+                    [Op.or]: ['title'].map(field => ({[field]: {[Op.iLike]: `%${searchTerm}%`}}))
+                }
             })
         },
         genres: {
