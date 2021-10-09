@@ -1,48 +1,31 @@
 import {GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString} from 'graphql'
-import {Movie} from './models'
-// import { resolver } from 'graphql-sequelize'
-const {resolver} = require('graphql-sequelize')
+import {Cast, Genre, Movie, Person} from './models'
 
+const {resolver} = require('graphql-sequelize')
 
 export const Query  = new GraphQLObjectType({
     name: 'Query',
     description: 'Root query',
     fields: () => ({
-        movie: {
-            type: MovieType,
-            description: 'A single movies available in our date store',
-            args: {
-                id: {type: GraphQLInt}
-            },
-            resolve: (parent, args) => ({})
-        },
         movies: {
             type: GraphQLList(MovieType),
             description: 'List of movies available in our date store',
             resolve: resolver(Movie)
         },
-        person: {
-            type: PersonType,
-            description: 'A single person in show business',
-            args: {
-                id: {type: GraphQLInt}
-            },
-            resolve: (parent, args) => ({})
-        },
         people: {
             type: GraphQLList(PersonType),
             description: 'List of people in show business',
-            resolve: () => ([])
+            resolve: () => resolver(Person)
         },
         genres: {
             type: GraphQLList(GenreType),
             description: 'List of all available genres',
-            resolve: () => ([])
+            resolve: () => resolver(Genre)
         },
         cast: {
             type: GraphQLList(CastType),
             description: 'List of cast members across all movies',
-            resolve: () => ([])
+            resolve: () => resolver(Cast)
         }
     })
 })
@@ -56,7 +39,15 @@ export const MovieType = new GraphQLObjectType({
         overview: {type: GraphQLString},
         budget: {type: GraphQLFloat},
         release_date: {type: GraphQLString},
-        vote_average: {type: GraphQLFloat}
+        vote_average: {type: GraphQLFloat},
+        cast: {
+            type: GraphQLList(CastType),
+            resolve: parent => parent.getCast()
+        },
+        genres: {
+            type: GraphQLList(GenreType),
+            resolve: parent => parent.getGenres()
+        }
     })
 })
 
@@ -77,6 +68,10 @@ export const CastType = new GraphQLObjectType({
         person_id: {type: GraphQLNonNull(GraphQLInt)},
         character_name: {type: GraphQLString},
         cast_order: {type: GraphQLInt},
+        person: {
+            type: PersonType,
+            resolve: parent => parent.getPerson()
+        }
     })
 })
 

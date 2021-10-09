@@ -43,7 +43,7 @@ export const Cast = sequelize.define('cast', {
     character_name: {type: DataTypes.STRING},
     cast_order: {type: DataTypes.INTEGER},
 }, {
-    tableName: 'cast',
+    tableName: 'movie_cast',
     timestamps: false
 })
 
@@ -74,9 +74,9 @@ Cast.removeAttribute('id')
 MovieGenre.removeAttribute('id')
 
 // associations
-Movie.hasMany(Cast)
-Cast.belongsTo(Movie)
-Person.hasMany(Cast)
-Cast.belongsTo(Person)
-Movie.belongsToMany(Genre, {through: MovieGenre})
-Genre.belongsToMany(Movie, {through: MovieGenre})
+Movie.hasMany(Cast, {foreignKey: 'movie_id', as: 'cast'})
+Cast.belongsTo(Movie, {foreignKey: 'movie_id', as: 'movie'})
+Person.hasMany(Cast, {foreignKey: 'person_id', as: 'castings'})
+Cast.belongsTo(Person, {foreignKey: 'person_id', as: 'person'})
+Movie.belongsToMany(Genre, {through: MovieGenre, foreignKey: 'movie_id'})
+Genre.belongsToMany(Movie, {through: MovieGenre, foreignKey: 'genre_id'})
