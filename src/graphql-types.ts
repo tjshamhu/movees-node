@@ -8,12 +8,28 @@ export const Query  = new GraphQLObjectType({
         movies: {
             type: GraphQLList(MovieType),
             description: 'List of movies available in our date store',
-            resolve: async () => Movie.findAll({include: ['cast', 'genres']})
+            args: {
+                page: {type: GraphQLInt},
+                pageSize: {type: GraphQLInt}
+            },
+            resolve: async (_, {page = 1, pageSize = 25}) => Movie.findAll({
+                include: ['cast', 'genres'],
+                limit: Math.abs(pageSize),
+                offset: Math.abs(pageSize * (page - 1))
+            })
         },
         people: {
             type: GraphQLList(PersonType),
             description: 'List of people in show business',
-            resolve: async () =>  Person.findAll({include: ['castings']})
+            args: {
+                page: {type: GraphQLInt},
+                pageSize: {type: GraphQLInt}
+            },
+            resolve: async (_, {page = 1, pageSize = 25}) =>  Person.findAll({
+                include: ['castings'],
+                limit: Math.abs(pageSize),
+                offset: Math.abs(pageSize * (page - 1))
+            })
         },
         genres: {
             type: GraphQLList(GenreType),
@@ -49,7 +65,7 @@ export const PersonType = new GraphQLObjectType({
     fields: () => ({
         person_id: {type: GraphQLNonNull(GraphQLInt)},
         person_name: {type: GraphQLString},
-        castings: {type: GraphQLList(CastType)},
+        castings: {type: GraphQLList(CastType)}
     })
 })
 
@@ -60,7 +76,7 @@ export const CastType = new GraphQLObjectType({
         movie_id: {type: GraphQLNonNull(GraphQLInt)},
         person_id: {type: GraphQLNonNull(GraphQLInt)},
         character_name: {type: GraphQLString},
-        cast_order: {type: GraphQLInt},
+        cast_order: {type: GraphQLInt}
     })
 })
 
