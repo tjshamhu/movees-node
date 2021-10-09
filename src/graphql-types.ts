@@ -1,8 +1,6 @@
 import {GraphQLFloat, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString} from 'graphql'
 import {Cast, Genre, Movie, Person} from './models'
 
-const {resolver} = require('graphql-sequelize')
-
 export const Query  = new GraphQLObjectType({
     name: 'Query',
     description: 'Root query',
@@ -10,22 +8,22 @@ export const Query  = new GraphQLObjectType({
         movies: {
             type: GraphQLList(MovieType),
             description: 'List of movies available in our date store',
-            resolve: resolver(Movie)
+            resolve: async () => Movie.findAll({include: ['cast', 'genres']})
         },
         people: {
             type: GraphQLList(PersonType),
             description: 'List of people in show business',
-            resolve: () => resolver(Person)
+            resolve: async () =>  Person.findAll({include: ['castings']})
         },
         genres: {
             type: GraphQLList(GenreType),
             description: 'List of all available genres',
-            resolve: () => resolver(Genre)
+            resolve: async () => Genre.findAll()
         },
         cast: {
             type: GraphQLList(CastType),
             description: 'List of cast members across all movies',
-            resolve: () => resolver(Cast)
+            resolve: async () => Cast.findAll()
         }
     })
 })
@@ -40,14 +38,8 @@ export const MovieType = new GraphQLObjectType({
         budget: {type: GraphQLFloat},
         release_date: {type: GraphQLString},
         vote_average: {type: GraphQLFloat},
-        cast: {
-            type: GraphQLList(CastType),
-            resolve: parent => parent.getCast()
-        },
-        genres: {
-            type: GraphQLList(GenreType),
-            resolve: parent => parent.getGenres()
-        }
+        cast: {type: GraphQLList(CastType)},
+        genres: {type: GraphQLList(GenreType)}
     })
 })
 
@@ -57,6 +49,7 @@ export const PersonType = new GraphQLObjectType({
     fields: () => ({
         person_id: {type: GraphQLNonNull(GraphQLInt)},
         person_name: {type: GraphQLString},
+        castings: {type: GraphQLList(CastType)},
     })
 })
 
@@ -68,10 +61,6 @@ export const CastType = new GraphQLObjectType({
         person_id: {type: GraphQLNonNull(GraphQLInt)},
         character_name: {type: GraphQLString},
         cast_order: {type: GraphQLInt},
-        person: {
-            type: PersonType,
-            resolve: parent => parent.getPerson()
-        }
     })
 })
 
