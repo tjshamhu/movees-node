@@ -30,11 +30,53 @@ export const Person = sequelize.define('Person', {
 })
 
 export const Cast = sequelize.define('cast', {
-    movie_id: {type: DataTypes.INTEGER, allowNull: false},
-    person_id: {type: DataTypes.INTEGER, allowNull: false},
+    movie_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {model: Movie, key: 'movie_id'}
+    },
+    person_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {model: Person, key: 'person_id'}
+    },
     character_name: {type: DataTypes.STRING},
     cast_order: {type: DataTypes.INTEGER},
 }, {
     tableName: 'cast',
     timestamps: false
 })
+
+export const Genre = sequelize.define('genre', {
+    genre_id: {type: DataTypes.INTEGER, allowNull: false, primaryKey: true},
+    genre_name: {type: DataTypes.STRING},
+}, {
+    tableName: 'genre',
+    timestamps: false
+})
+
+const MovieGenre = sequelize.define('MovieGenre', {
+    movie_id: {
+        type: DataTypes.INTEGER,
+        references: {model: Movie, key: 'movie_id'}
+    },
+    genre_id: {
+        type: DataTypes.INTEGER,
+        references: {model: Genre, key: 'genre_id'}
+    }
+}, {
+    timestamps: false,
+    tableName: 'movie_genres'
+});
+
+// remove sequelize default props
+Cast.removeAttribute('id')
+MovieGenre.removeAttribute('id')
+
+// associations
+Movie.hasMany(Cast)
+Cast.belongsTo(Movie)
+Person.hasMany(Cast)
+Cast.belongsTo(Person)
+Movie.belongsToMany(Genre, {through: MovieGenre})
+Genre.belongsToMany(Movie, {through: MovieGenre})
