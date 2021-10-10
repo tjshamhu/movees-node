@@ -6,9 +6,12 @@ import {graphqlHTTP} from 'express-graphql'
 import {GraphQLSchema} from 'graphql'
 import {sequelize} from './models'
 import {Query} from './graphql-types'
+import cors from 'cors'
 
 const PORT = process.env.PORT || 3000
 const app = express()
+
+app.use(cors())
 
 const schema = new GraphQLSchema({ query: Query });
 
