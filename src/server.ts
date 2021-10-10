@@ -7,6 +7,7 @@ import {GraphQLSchema} from 'graphql'
 import {sequelize} from './models'
 import {Query} from './graphql-types'
 
+const PORT = process.env.PORT || 3000
 const app = express()
 
 const schema = new GraphQLSchema({ query: Query });
@@ -16,7 +17,7 @@ app.use('/api', graphqlHTTP({
     graphiql: true,
 }))
 
-app.listen(3000, () => console.log('Server running'))
+app.listen(PORT, () => console.log('Server running'))
 
 sequelize.authenticate()
     .then(() => console.log('Database connection established'))
