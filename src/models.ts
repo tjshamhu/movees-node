@@ -7,7 +7,8 @@ export const sequelize = new Sequelize({
     port: 5432,
     username: DB_USERNAME,
     password: DB_PASSWORD,
-    database: DB_DATABASE
+    database: DB_DATABASE,
+    ssl: true
 })
 
 export const Movie = sequelize.define('movie', {
