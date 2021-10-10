@@ -4,6 +4,7 @@ const {DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE} = process.env
 export const sequelize = new Sequelize({
     dialect: 'postgres',
     host: DB_HOST,
+    port: 5432,
     username: DB_USERNAME,
     password: DB_PASSWORD,
     database: DB_DATABASE
