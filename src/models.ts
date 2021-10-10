@@ -8,7 +8,11 @@ export const sequelize = new Sequelize({
     username: DB_USERNAME,
     password: DB_PASSWORD,
     database: DB_DATABASE,
-    ssl: true
+    dialectOptions: {
+        ssl: {
+            rejectUnauthorized: false
+        }
+    }
 })
 
 export const Movie = sequelize.define('movie', {
